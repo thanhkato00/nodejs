@@ -5,7 +5,7 @@ let getTopDoctorHome = (limit) => {
     try {
       let users = await db.User.findAll({
         limit: limit,
-        where: { roleId: "R1" },
+        where: { roleId: "R2" },
         order: [["createdAt", "DESC"]],
         attributes: { exclude: ["password"] },
         include: [
