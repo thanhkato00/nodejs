@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models/index";
 
 let getTopDoctorHome = (limit) => {
@@ -33,6 +34,50 @@ let getTopDoctorHome = (limit) => {
     }
   });
 };
+let getAllDoctors = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let doctors = await db.User.findAll({
+        where: { roleId: "R2" },
+        attributes: { exclude: ["password", "image"] },
+      });
+      resolve({
+        errCode: 0,
+        errMessage: "get doctor information",
+        data: doctors,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+let saveDetailInfoDoctor = (inputData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!inputData || !inputData.contentHTML || !inputData.contentMarkdown) {
+        resolve({
+          errCode: 1,
+          errMessage: "missing parameter",
+        });
+      } else {
+        await db.Markdown.create({
+          contentHTML: inputData.contentHTML,
+          contentMarkdown: inputData.contentMarkdown,
+          description: inputData.description,
+          doctorId: inputData.doctorId,
+        });
+        resolve({
+          errCode: 0,
+          errMessage: "save detail information doctor",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
+  getAllDoctors: getAllDoctors,
+  saveDetailInfoDoctor: saveDetailInfoDoctor,
 };

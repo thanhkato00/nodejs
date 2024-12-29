@@ -173,7 +173,7 @@ let updateUser = (data) => {
         user.roleId = data.roleId;
         user.positionId = data.positionId;
         if (user.image) {
-          user.image = data.avatar;
+          user.image = data.image;
         }
         await user.save();
 
